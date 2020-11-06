@@ -1,0 +1,317 @@
+<div class="container">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <h2>Manage <b>Cars</b></h2>
+                    </div>
+                    <div class="col-xs-6">
+                        <input type="text"   (change)=Change($event)/>
+                        <button (click)="Serch()"   class="btn btn-success" > <span>Search</span></button>
+                    </div>
+                    <div class="col-xs-6">
+                       
+                        <a href="#addCarModal"  class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Car</span></a>
+                    
+                        <button (click)="filterByName()"   class="btn btn-success" > <span>Filter By Name</span></button>
+                    
+                        <button (click)="filterByModel()"   class="btn btn-success" > <span>Filter By Model</span></button>
+                        </div>
+                </div>
+            </div>
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            <span class="custom-checkbox">
+                                <input type="checkbox" id="selectAll">
+                                <label for="selectAll"></label>
+                            </span>
+                        </th>
+                        <th>Name</th>
+                        <th>Color</th>
+                        <th>Model</th>
+                        <th>Owner</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                     
+                    <tr *ngFor="let car of cars">
+
+                        <td>
+                            <span class="custom-checkbox">
+                                <input type="checkbox" id="checkbox1" name="options[]" value="1">
+                                <label for="checkbox1"></label>
+                            </span>
+                        </td>
+                        <td>{{car.name}}</td>
+                        <td>{{car.color}}</td>
+                        <td>{{car.model}}</td>
+                        <td>{{car.owner}}</td>
+                        <td>
+                            <a href="#editCarModal"   class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit" (click)="onclick(car.name)">&#xE254;</i></a>
+                            <a href="#deleteCarModal" (click)="delete(car.id)" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                        </td>
+                    </tr>
+                    
+                    
+                    
+                    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>        
+</div>
+
+
+
+<div  class="modal fade"  id="deleteCarModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">						
+                    <h4 class="modal-title">Delete Car</h4>
+                    <button type="button" id="delte" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">					
+                    <p>Are you sure you want to delete these Records?</p>
+                    <p class="text-warning"><small>This action cannot be undone.</small></p>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                    <input type="submit" class="btn btn-danger" (click)="deleteCar()" value="Delete">
+                    
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div  class="modal fade"  id="editCartrue">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">						
+                    <h4 class="modal-title">edit Car</h4>
+                        </div>
+                <div class="modal-body">					
+                    <p>Edit Car is done</p>
+                    
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Close">
+                    
+                    
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div  class="modal fade"  id="editCarflase">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">						
+                    <h4 class="modal-title">edit Car</h4>
+                        </div>
+                <div class="modal-body">					
+                    <p>{{message}}</p>
+                    
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Close">
+                    
+                    
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Edit Car HTML -->
+<div id="editCarModal" class="modal fade" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form [formGroup]="editCar" (ngSubmit)="onSubmit()">
+                <div class="modal-header">						
+                    <h4 class="modal-title">Edit Car</h4>
+                    <button type="button" class="close"  id="edit" data-dismiss="modal"  aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body"  *ngIf="car">					
+                    <div class="form-group">
+                        <div *ngIf="f.name.touched && f.name.invalid" class="alert alert-danger">
+                            <div *ngIf="f.name.errors?.minlength">name  is less..</div>
+                            <div *ngIf="f.name.errors.required">name  is required..</div>
+                    </div>
+                        <label>Name</label>
+                        <input type="text" class="form-control" [(ngModel)]="car.name" required [formControlName]="'name'">
+                    </div>
+                    <div class="form-group">
+                        <label>Color</label>
+                        <div *ngIf="f.color.touched && f.color.invalid" class="alert alert-danger">
+                        <div *ngIf="f.color.errors?.minlength">Color is less.</div>
+                        <div *ngIf="f.color.errors.required">Color  is required..</div>
+                        </div>
+                        <input type="text" class="form-control" [(ngModel)]="car.color" required [formControlName]="'color'">
+                    </div>
+                    <div class="form-group">
+                        <label>Model</label>
+                        <div *ngIf="f.model.touched && f.model.invalid" class="alert alert-danger">
+                        <div *ngIf="f.model.errors?.minlength">Model is less</div>
+                        <div *ngIf="f.model.errors.required">Model  is required..</div>
+                        </div>
+                        <input class="form-control" [(ngModel)]="car.model" required  [formControlName]="'model'">
+                    </div>
+                    <div class="form-group">
+                        <div *ngIf="f.owner.touched && f.phone.invalid" class="alert alert-danger">
+                        <div *ngIf="f.owner.errors?.minlength">Owner is less</div>
+                        <div *ngIf="f.owner.errors.required">Owner  is required..</div>
+                        </div>
+                        <label>Owner</label>
+                        <input type="text" class="form-control" [(ngModel)] ="car.owner" required [formControlName]="'owner'">
+                    </div>	
+                    
+                    <div class="form-group">
+                        <label>hideMe</label>
+                        
+                        <select class="form-select wide" id="default-select"  [formControlName]="'hideMe'" [(ngModel)]="car.hideMe">
+                            <option  [selected]="car.hideMe==1" [value]="1" >True</option>
+                            <option  [selected]="car.hideMe==0" [value]="0" >False</option>
+            
+                        
+                        </select>
+                       
+                    </div>
+                   				
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                    <input type="submit" class="btn btn-info" value="Save" [disabled]="!editCar.valid" >
+                    <a href="#editCartrue" id="tedit" hidden class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Edit Car</span></a>
+						
+                    <a href="#editCarflase" id="fedit" hidden class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Edit Car</span></a>
+                
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div id="addCarModal" class="modal fade" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form [formGroup]="addCar" (ngSubmit)="onSubmit2()">
+                <div class="modal-header">						
+                    <h4 class="modal-title">Add Car</h4>
+                    <button type="button" class="close" data-dismiss="modal" id="add" aria-hidden="true">&times;</button>
+                </div>
+                
+                <div class="modal-body" >					
+                    <div class="form-group">
+                        <div *ngIf="f.name.touched && f.name.invalid" class="alert alert-danger">
+                            <div *ngIf="f.name.errors?.minlength">name  is less..</div>
+                            <div *ngIf="f.name.errors.required">name  is required..</div>
+                    </div>
+                        <label>Name</label>
+                        <input type="text" class="form-control"  required [formControlName]="'name'">
+                    </div>
+                    <div class="form-group">
+                        <label>Color</label>
+                        <div *ngIf="f.color.touched && f.color.invalid" class="alert alert-danger">
+                        <div *ngIf="f.color.errors?.minlength">Color is less.</div>
+                        <div *ngIf="f.color.errors.required">Color  is required..</div>
+                        </div>
+                        <input type="text" class="form-control"  required [formControlName]="'color'">
+                    </div>
+                    <div class="form-group">
+                        <label>Model</label>
+                        <div *ngIf="f.model.touched && f.model.invalid" class="alert alert-danger">
+                        <div *ngIf="f.model.errors?.minlength">Model is less</div>
+                        <div *ngIf="f.model.errors.required">Model  is required..</div>
+                        </div>
+                        <input class="form-control"  required  [formControlName]="'model'">
+                    </div>
+                    <div class="form-group">
+                        <div *ngIf="f.owner.touched && f.phone.invalid" class="alert alert-danger">
+                        <div *ngIf="f.owner.errors?.minlength">Owner is less</div>
+                        <div *ngIf="f.owner.errors.required">Owner  is required..</div>
+                        </div>
+                        <label>Owner</label>
+                        <input type="text" class="form-control"  required [formControlName]="'owner'">
+                    </div>	
+                    
+                    <div class="form-group">
+                        <label>hideMe</label>
+                        
+                        <select class="form-select wide" id="default-select"  [formControlName]="'hideMe'" >
+                            <option  [selected]="car.hideMe==1" [value]="1" >True</option>
+                            <option  [selected]="car.hideMe==0" [value]="0" >False</option>
+            
+                        
+                        </select>
+                       
+                    </div>
+                   				
+                </div>
+
+
+                
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel"  />
+                    <input type="submit" class="btn btn-info" value="Save" [disabled]="!addCar.valid" >
+                    <a href="#addCartrue" hidden id="tadd"  class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Employee</span></a>
+						
+                    <a href="#addCarflase" hidden id="fadd"  class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Employee</span></a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div  class="modal fade"  id="addCartrue">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">						
+                    <h4 class="modal-title">Add Car</h4>
+                        </div>
+                <div class="modal-body">					
+                    <p>Add Car is Done</p>
+                    
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal"  (click)="refresh()" value="Close">
+                    <a href="#login" id="login" hidden class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Employee</span></a>
+                   
+                    
+                    
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div  class="modal fade"  id="addCarflase">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">						
+                    <h4 class="modal-title">Add Car </h4>
+                        </div>
+                <div class="modal-body">					
+                    <p>{{message}}</p>
+                    
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal"  value="Close">
+                    
+                    
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

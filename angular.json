@@ -119,6 +119,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "yeloTask"
+    }
+  },
+  "defaultProject": "yeloTask",
+  "cli": {
+    "analytics": "d793900a-5b79-41ae-8b73-72892ec5b147"
+  }
 }
